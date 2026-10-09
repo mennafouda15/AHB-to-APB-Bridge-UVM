@@ -1,1 +1,7 @@
 rtl/
+sim/*
+
+!sim/run.do
+!sim/wave.do
+!sim/files.txt
+!sim/coverage_exclusion.do
