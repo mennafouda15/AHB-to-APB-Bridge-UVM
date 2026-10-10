@@ -94,9 +94,9 @@ module tb_top #(
   ahb2apb_assertions #(
         .ADDRWIDTH(ADDRWIDTH)
     ) sva_inst (
-        .ahb_vif(ahb_intrf),
-        .apb_vif(apb_intrf)
-    );
+       .ahb_vif(ahb_intrf), .apb_vif(apb_intrf),
+       .s_req_h(dut.s_req_h), .s_ack_h(dut.s_ack_h),
+       .s_req_p(dut.s_req_p), .s_ack_p(dut.s_ack_p));
 
 
   initial begin
