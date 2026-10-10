@@ -6,23 +6,23 @@ import uvm_pkg::*;
 
 import ahb2apb_pkg::*;
 
-module tb_top;
+module tb_top #(
+  parameter time HCLK_PERIOD = 10ns,
+  parameter time PCLK_PERIOD = 10ns,
+  parameter time PCLK_PHASE  = 0ns
+);
 
-  localparam ADDRWIDTH = 16;
-  localparam HCLK_PERIOD = 7ns;
-  localparam PCLK_PERIOD = 11ns;
+  parameter int ADDRWIDTH = 16;
 
-  bit HCLK;
-  bit PCLK;
+  bit HCLK = 0;
+  bit PCLK = 0;
 
   initial begin
-    #(PCLK_PERIOD/2);
-    HCLK = 0;
     forever #(HCLK_PERIOD/2) HCLK = ~HCLK;
   end
 
   initial begin
-    PCLK = 0;
+    #(PCLK_PHASE);
     forever #(PCLK_PERIOD/2) PCLK = ~PCLK;
   end
 
