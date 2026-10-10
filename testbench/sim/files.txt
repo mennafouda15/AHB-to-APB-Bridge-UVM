@@ -1,0 +1,90 @@
+// ====================================================================
+// INCLUDE DIRECTORIES
+// ====================================================================
++incdir+../RTL
++incdir+../ahb_agent_pkg
++incdir+../apb_agent_pkg
++incdir+../sequences
++incdir+../ahb2apb
++incdir+../test
++incdir+../coverage
+
+// ====================================================================
+// 1. RTL FILES
+// ====================================================================
+../RTL/cmsdk_ahb_to_apb_async_h.v
+../RTL/cmsdk_ahb_to_apb_async_p.v
+../RTL/cmsdk_ahb_to_apb_async_syn.v
+../RTL/cmsdk_ahb_to_apb_async.v
+
+// ====================================================================
+// 2. INTERFACES
+// ====================================================================
+../ahb_agent_pkg/ahb_if.sv
+../apb_agent_pkg/apb_if.sv
+
+// ====================================================================
+// 3. AHB AGENT PACKAGES
+// ====================================================================
+../ahb_agent_pkg/ahb_config_pkg.sv
+../ahb_agent_pkg/ahb_sequence_item_pkg.sv
+../ahb_agent_pkg/ahb_driver_pkg.sv
+../ahb_agent_pkg/ahb_monitor_pkg.sv
+../ahb_agent_pkg/ahb_sequencer_pkg.sv
+../ahb_agent_pkg/ahb_agent_pkg.sv
+../ahb_agent_pkg/ahb_pkg.sv
+
+// ====================================================================
+// 4. APB AGENT PACKAGES
+// ====================================================================
+../apb_agent_pkg/apb_config_pkg.sv
+../apb_agent_pkg/apb_sequence_item_pkg.sv
+../apb_agent_pkg/apb_response_pkg.sv
+../apb_agent_pkg/apb_driver_pkg.sv
+../apb_agent_pkg/apb_monitor_pkg.sv
+../apb_agent_pkg/apb_sequencer_pkg.sv
+../apb_agent_pkg/apb_agent_pkg.sv
+../apb_agent_pkg/apb_pkg.sv
+
+// ====================================================================
+// 5. SEQUENCES
+// ====================================================================
+../sequences/ahb_base_sequence_pkg.sv
+../sequences/ahb_back2back_read_sequence_pkg.sv
+../sequences/ahb_back2back_write_sequence_pkg.sv
+../sequences/ahb_htrans_transition_sequence_pkg.sv
+../sequences/ahb_random_back2back_read_write_sequence_pkg.sv
+../sequences/ahb_random_read_write_sequence_pkg.sv
+../sequences/ahb_read_sequence_pkg.sv
+../sequences/ahb_write_sequence_pkg.sv
+../sequences/apb_sequence_pkg.sv
+../sequences/ahb_idle_sequence_pkg.sv
+../sequences/reset_sequence_pkg.sv
+../sequences/ahb_unmatched_req_reset_sequence_pkg.sv
+
+// ====================================================================
+// 6. ENVIRONMENT (AHB2APB) PACKAGES
+// ====================================================================
+../ahb2apb/ahb2apb_config_pkg.sv
+../ahb2apb/ahb2apb_ahb_predictor_pkg.sv
+../ahb2apb/ahb2apb_apb_predictor_pkg.sv
+../ahb2apb/ahb2apb_comparator_pkg.sv
+../ahb2apb/ahb2apb_scoreboard_pkg.sv
+../ahb2apb/ahb2apb_environment_pkg.sv
+../ahb2apb_pkg.sv
+
+// ====================================================================
+// 7. TEST PACKAGE
+// ====================================================================
+../test/ahb_apb_test_pkg.sv
+
+// ====================================================================
+// 8. COVERGE
+// ====================================================================
+../coverage/ahb2apb_coverage_pkg.sv
+
+// ====================================================================
+// 9. TOP MODULE & ASSERTIONS
+// ====================================================================
+../assertions/ahb2apb_assertions.sv
+../tb_top.sv
