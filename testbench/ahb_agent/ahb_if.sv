@@ -18,6 +18,9 @@ interface ahb_if #(parameter ADDRWIDTH = 16) (input bit HCLK);
     logic                         HRESP     ;
     logic     [31:0]              HRDATA    ;
 
+    //for unmatched test to disable assertion "a_wrap_hs3_req_fall"
+    logic ignore_hs3_check = 0;
+
     clocking drv_cb @(posedge HCLK);
         default input #1step output #1;
         output HSEL , HADDR , HTRANS , HSIZE , HPROT , HWRITE , HWDATA;
