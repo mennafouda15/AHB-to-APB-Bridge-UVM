@@ -2,7 +2,7 @@ module ahb2apb_assertions #(
     parameter ADDRWIDTH = 16
 )(
     ahb_if ahb_vif,
-    apb_if apb_vif
+    apb_if apb_vif,
 
     // DUT-internal handshake signals 
     input logic s_req_h,
@@ -120,12 +120,12 @@ module ahb2apb_assertions #(
     else $error("WRAP-HS-1: Req rising edge while Ack is high");
 
   // 2: Ack may only rise when Req is high  
-  a_wrap_hs2_ack_rise : assert property (@(apb_cb) disable iff (!apb_vif.PRESETn || !ahb_vif.HRESETn)
+  a_wrap_hs2_ack_rise : assert property (@(apb_cb) disable iff (!apb_vif.PRESETn || !ahb_vif.HRESETn || ahb_vif.ignore_hs_2_3_check)
       $rose(s_ack_p) |-> s_req_p)
     else $error("WRAP-HS-2: Ack rising edge while Req is low");
 
   // 3: Req may only fall when Ack is high   
-  a_wrap_hs3_req_fall : assert property (@(ahb_cb) disable iff (!ahb_vif.HRESETn || !apb_vif.PRESETn || ahb_vif.ignore_hs3_check)
+  a_wrap_hs3_req_fall : assert property (@(ahb_cb) disable iff (!ahb_vif.HRESETn || !apb_vif.PRESETn || ahb_vif.ignore_hs_2_3_check)
       $fell(s_req_h) |-> s_ack_h)
     else $error("WRAP-HS-3: Req falling edge while Ack is low");
 

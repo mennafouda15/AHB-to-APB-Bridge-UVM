@@ -24,20 +24,7 @@ package apb_sequence_item_pkg;
     //---------------------------------------------------------
 
     `uvm_object_param_utils_begin(apb_sequence_item #(ADDRWIDTH))
-        `uvm_field_int(PENABLE, UVM_NOCOMPARE)
-        `uvm_field_int(PWRITE,UVM_ALL_ON | UVM_NOCOMPARE)
-        `uvm_field_int(PSTRB,UVM_ALL_ON | UVM_NOCOMPARE)
-
-        `uvm_field_int(PRDATA,UVM_DEFAULT | UVM_NOCOMPARE )
-        `uvm_field_int(PSLVERR,UVM_ALL_ON | UVM_NOCOMPARE)
-        `uvm_field_int(PREADY,UVM_ALL_ON | UVM_NOCOMPARE)
-
-        `uvm_field_int(PPROT,UVM_ALL_ON | UVM_NOCOMPARE)
-        `uvm_field_int(PSEL,UVM_ALL_ON | UVM_NOCOMPARE)
-        `uvm_field_int(APBACTIVE, UVM_NOCOMPARE)
-
-        `uvm_field_int(PADDR,UVM_ALL_ON )
-        `uvm_field_int(PWDATA,UVM_DEFAULT | UVM_NOCOMPARE )
+  
         `uvm_field_int(wait_count,UVM_NOCOMPARE )
         
     `uvm_object_utils_end

@@ -170,9 +170,9 @@ package ahb_apb_test_pkg;
             `uvm_info(get_type_name(), "Finish Idle sequence", UVM_LOW)
 
             // 11. Start Reset After Idle Sequence
-            `uvm_info(get_type_name(), "Apply Reset After sequence", UVM_LOW)
+            `uvm_info(get_type_name(), "Apply Reset After Idle sequence", UVM_LOW)
             rst_seq.both_reset();
-            `uvm_info(get_type_name(), "Finish Reset After sequence", UVM_LOW)
+            `uvm_info(get_type_name(), "Finish Reset After Idle sequence", UVM_LOW)
 
             // 12. Start Reset During APB Setup Phase Sequence
             `uvm_info(get_type_name(), "Start Reset during APB setup phase sequence", UVM_LOW)
@@ -193,7 +193,7 @@ package ahb_apb_test_pkg;
             `uvm_info(get_type_name(), "Start request/acknowledgment mismatch sequence", UVM_LOW)
 
             // Disable the assertion for this sequence
-            ahb_cfg.ahb_vif.ignore_hs3_check = 1;
+            ahb_cfg.ahb_vif.ignore_hs_2_3_check = 1;
 
             unmatched_seq.mode = RESET_AHB_ONLY;
             unmatched_seq.start(env.ahb_agt.seqr);
@@ -202,7 +202,7 @@ package ahb_apb_test_pkg;
             unmatched_seq.start(env.ahb_agt.seqr);
 
             // Re-enable the assertion
-            ahb_cfg.ahb_vif.ignore_hs3_check = 0;
+            ahb_cfg.ahb_vif.ignore_hs_2_3_check = 0;
             
             `uvm_info(get_type_name(), "Finish request/acknowledgment mismatch sequence", UVM_LOW)
 

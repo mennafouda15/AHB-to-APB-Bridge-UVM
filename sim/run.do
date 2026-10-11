@@ -1,3 +1,6 @@
+vlib work
+vlog -f files.txt  +cover -covercells 
+
 proc run_task {label hclk_period pclk_period pclk_phase} {
     puts "\nRunning $label"
 
