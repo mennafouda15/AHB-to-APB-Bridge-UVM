@@ -49,14 +49,16 @@ package ahb_monitor_pkg;
 			ahb_seq_item_t pending_item;
 			ahb_seq_item_t current_item;
 
+            // Number of cycles the slave held HREADY low during the data phase
 			int unsigned wait_states = 0;
 
-			`uvm_info(get_type_name(),"ahb_monitor_run_phase",UVM_LOW);
+			`uvm_info(get_type_name(),"ahb_monitor_run_phase",UVM_LOW)
 
 			forever begin
 
 				@(ahb_vif.mon_cb);
 
+                // If there is any active transaction drop it while reset, it will never complete
 				if(ahb_vif.HRESETn !== 1'b1) begin
 					pending_item = null;
 
@@ -65,19 +67,15 @@ package ahb_monitor_pkg;
 					continue;	
 				end
 
+                // Complete the previous transfer's data phase
 				if (pending_item != null) begin
 					if (ahb_vif.mon_cb.HREADY === 1'b1) begin
-						//if (pending_item.HWRITE == 1'b1) begin
-							pending_item.HWDATA = ahb_vif.mon_cb.HWDATA;
-						//end
-						//else begin
-							pending_item.HRDATA = ahb_vif.mon_cb.HRDATA;
-						//end
-
+						pending_item.HWDATA = ahb_vif.mon_cb.HWDATA;
+						pending_item.HRDATA = ahb_vif.mon_cb.HRDATA;
 						pending_item.HRESP = ahb_vif.mon_cb.HRESP;
 						pending_item.wait_states = wait_states;
 
-						`uvm_info(get_type_name,pending_item.convert2string(),UVM_MEDIUM)
+						`uvm_info(get_type_name(),pending_item.convert2string(),UVM_MEDIUM)
 
                         ahb_aport.write(pending_item);
 
@@ -86,10 +84,12 @@ package ahb_monitor_pkg;
 						wait_states = 0;
 					end
 					else begin
+						// Slave is stalling the data phase
 						wait_states++;
 					end
 				end
 
+                // Capture a new address phase
 				if (ahb_vif.mon_cb.HREADY === 1'b1 && ahb_vif.mon_cb.HSEL === 1'b1 && ahb_vif.mon_cb.HTRANS[1] === 1'b1) begin
 					current_item = ahb_seq_item_t::type_id::create("current_item");
 

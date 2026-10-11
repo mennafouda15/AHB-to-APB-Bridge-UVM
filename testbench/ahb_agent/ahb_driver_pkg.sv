@@ -38,6 +38,7 @@ package ahb_driver_pkg;
         	ahb_vif = ahb_cfg.ahb_vif;
         endfunction : connect_phase
 
+        // Puts the bus in a safe idle state, called at start and after every reset
         task initalize_bus();
         	ahb_vif.drv_cb.HSEL   <= 1'b0;
         	ahb_vif.drv_cb.HADDR  <= 'b0; 
@@ -48,6 +49,7 @@ package ahb_driver_pkg;
             ahb_vif.drv_cb.HWDATA <= '0; 	
         endtask : initalize_bus
 
+        // Drives the address & control signal in address phase of one transfer
         task drive_addr(ahb_seq_item_t ahb_item);
         	ahb_vif.drv_cb.HSEL   <= ahb_item.HSEL;
         	ahb_vif.drv_cb.HADDR  <= ahb_item.HADDR; 
@@ -57,6 +59,7 @@ package ahb_driver_pkg;
         	ahb_vif.drv_cb.HPROT  <= ahb_item.HPROT;  	
         endtask : drive_addr
 
+        // Puts the bus in idle state, if there is no transaction
         task drive_idle();
         	ahb_vif.drv_cb.HSEL   <= 1'b0;
         	ahb_vif.drv_cb.HTRANS <= 2'b00; 	
@@ -74,11 +77,15 @@ package ahb_driver_pkg;
             @(ahb_vif.drv_cb);
 
         	forever begin
+
+				// Reset can arrive in mid-transfer so we have to release the sequencer first,
+				// otherwise the sequence hangs waiting for item_done
         		if (ahb_vif.HRESETn !== 1'b1) begin
         			if (addr_item != null) begin
         				seq_item_port.item_done();
         			end
 
+        			// Both pipeline stages are lost on reset
         			addr_item = null;
         			data_item = null;
 
@@ -91,6 +98,8 @@ package ahb_driver_pkg;
         			continue;
         		end
 
+                // Non-blocking fetch, if the sequence has nothing ready 
+				// driving IDLE instead of freezing the bus.
         		if(addr_item == null) begin
         			seq_item_port.try_next_item(addr_item);
         		end
@@ -107,14 +116,13 @@ package ahb_driver_pkg;
 				end 
 
         		@(ahb_vif.drv_cb);
-
+        		
         		if (ahb_vif.drv_cb.HREADY === 1'b1) begin
-        			if (data_item != null) begin
-        				data_item.HRDATA = ahb_vif.drv_cb.HRDATA;
-        				data_item.HRESP = ahb_vif.drv_cb.HRESP;
-        				data_item = null;
-        			end
 
+        		    // Previous data phase finished
+        			data_item = null;
+
+                    // Current address accepted, it becomes the next data phase
         			if (addr_item != null) begin
         				if (addr_item.HTRANS[1]) begin
         					data_item = addr_item;
@@ -125,7 +133,8 @@ package ahb_driver_pkg;
         			addr_item = null;
         			end
         		end
-
+   
+                // Count stalls that slave held HREADY low during the data phase
         		else if(data_item != null) begin
         			data_item.wait_states++;
         		end
