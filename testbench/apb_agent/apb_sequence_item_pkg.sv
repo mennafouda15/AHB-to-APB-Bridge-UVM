@@ -24,9 +24,21 @@ package apb_sequence_item_pkg;
     //---------------------------------------------------------
 
     `uvm_object_param_utils_begin(apb_sequence_item #(ADDRWIDTH))
-  
-        `uvm_field_int(wait_count,UVM_NOCOMPARE )
-        
+        // predicted by the APB predictor -> compared automatically
+        `uvm_field_int(PADDR,      UVM_ALL_ON)
+        `uvm_field_int(PWRITE,     UVM_ALL_ON)
+        `uvm_field_int(PSTRB,      UVM_ALL_ON)
+        `uvm_field_int(PPROT,      UVM_ALL_ON)
+        `uvm_field_int(PSEL,       UVM_ALL_ON)
+        `uvm_field_int(PENABLE,    UVM_ALL_ON)
+        `uvm_field_int(APBACTIVE,  UVM_ALL_ON)
+
+        // not compared by the macros
+        `uvm_field_int(PWDATA,     UVM_ALL_ON | UVM_NOCOMPARE) // compare when HWRITE is active
+        `uvm_field_int(PRDATA,     UVM_ALL_ON | UVM_NOCOMPARE) 
+        `uvm_field_int(PSLVERR,    UVM_ALL_ON | UVM_NOCOMPARE)
+        `uvm_field_int(PREADY,     UVM_ALL_ON | UVM_NOCOMPARE)
+        `uvm_field_int(wait_count, UVM_ALL_ON | UVM_NOCOMPARE)
     `uvm_object_utils_end
 
     //---------------------------------------------------------
@@ -43,14 +55,12 @@ package apb_sequence_item_pkg;
             return 0;
         end
 
-        // Compare all base class and UVM_DEFAULT fields (like PADDR, PWRITE)
         status &= super.do_compare(rhs, comparer);
 
-        // Conditionally compare PWDATA only during Write operations
         if (this.PWRITE == 1'b1) begin
             status &= comparer.compare_field("PWDATA", this.PWDATA, rhs_.PWDATA, 32);
         end
-// Print comparison results directly to the transcript
+
     `uvm_info("APB_ITEM_CMP", $sformatf("\n--- APB ITEM COMPARISON [%s] ---\n Expected: %s\n Actual:   %s",  status ? "PASS" : "FAIL",
                                         this.convert2string(),
                                         rhs_.convert2string()), UVM_LOW)

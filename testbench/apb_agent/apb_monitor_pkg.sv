@@ -99,9 +99,12 @@ package apb_monitor_pkg;
                                 transaction_item.PSTRB = seq_item.PSTRB;
                                 transaction_item.PPROT = seq_item.PPROT;
                                 transaction_item.PWDATA = seq_item.PWDATA;
+                                transaction_item.APBACTIVE = seq_item.APBACTIVE;
+
                                 transaction_item.PSEL = apb_intrf.apb_cb.PSEL;
                                 transaction_item.PENABLE = apb_intrf.apb_cb.PENABLE;
-                                transaction_item.APBACTIVE = seq_item.APBACTIVE;
+
+                                
                                 // Transfer completed
                                 transaction_item.PRDATA     = apb_intrf.apb_cb.PRDATA;
                                 transaction_item.PSLVERR    = apb_intrf.apb_cb.PSLVERR;
