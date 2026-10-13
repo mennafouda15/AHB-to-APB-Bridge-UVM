@@ -40,9 +40,6 @@ package ahb2apb_ahb_predictor_pkg;
 		function void ahb_exp_out(input apb_seq_item_t data_in, inout ahb_seq_item_t data_out);
 			`uvm_info("DEBUG","AHB Expected Output Funtion Had Been Called",UVM_HIGH); // check predictor has called the calc function
 
-			// HREADYOUT
-			data_out.HREADYOUT = data_in.PREADY;
-
 			// HRESP
 			data_out.HRESP = data_in.PSLVERR;
 
